@@ -1,19 +1,29 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWeather } from "../store/slices/weather";
-import { useEffect } from "react";
+import { setInputValue } from "../store/slices/search";
+import { useState } from "react";
 
 export default function Table({ data }) {
+  const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+  const inputValue = useSelector((state) => state.inputValue);
+
+  const handelChange = (e) => {
+    setInput(e.target.value);
+    dispatch(setInputValue(e.target.value));
+  };
   if (!data) {
     return (
       <div className="container">
         <div className="input-group">
           <input
+            value={input}
+            onChange={handelChange}
             type="text"
             className="form-control"
             placeholder="Enter City Name:"
             aria-describedby="basic-addon2"
-          ></input>
+          />
           <div className="input-group-append">
             <button className="btn btn-outline-primary" type="button">
               Submit
