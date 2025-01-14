@@ -1,27 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 export const weatherSlice = createSlice({
   name: "weather",
   initialState: {
-    temp: null,
-    press: null,
-    humidity: null,
+    isLoading: false,
+    data: [],
+    error: false,
   },
-  reducers: {
-    setTemp: (state, action) => {
-      state.temp = action.payload;
-    },
-    setPress: (state, action) => {
-      state.press = action.payload;
-    },
-    setHumidity: (state, action) => {
-      state.humidity = action.payload;
-    },
-  },
+  extraReducers: (builder) => {},
 });
-
-export const { setTemp } = weatherSlice.actions;
-export const { setPress } = weatherSlice.actions;
-export const { setHumidity } = weatherSlice.actions;
 
 export default weatherSlice.reducer;
