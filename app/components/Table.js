@@ -1,18 +1,36 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { setInputValue } from "../store/slices/search";
-import { useState } from "react";
+import { getLatLong, getForecast } from "../store/slices/apiSlice";
+import { useState, useEffect } from "react";
 
-export default function Table({ data }) {
+export default function Table() {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  const inputValue = useSelector((state) => state.inputValue);
+
+  const { latitude, longitude, weather, loading, error } = useSelector(
+    (state) => state.weather
+  );
+
+  // TODO: Figure out how to populate jsx elements with weatherData
+  // Start work on chart components
+  const weatherData = [];
+
+  const submit = (e) => {
+    e.preventDefault();
+    dispatch(getLatLong(input));
+  };
 
   const handelChange = (e) => {
     setInput(e.target.value);
-    dispatch(setInputValue(e.target.value));
   };
-  if (!data) {
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      dispatch(getForecast({ latitude, longitude }));
+    }
+  }, [latitude, longitude, dispatch]);
+
+  if (weatherData.length < 1) {
     return (
       <div className="container">
         <div className="input-group">
@@ -25,7 +43,11 @@ export default function Table({ data }) {
             aria-describedby="basic-addon2"
           />
           <div className="input-group-append">
-            <button className="btn btn-outline-primary" type="button">
+            <button
+              onClick={submit}
+              className="btn btn-outline-primary"
+              type="button"
+            >
               Submit
             </button>
           </div>
@@ -49,11 +71,13 @@ export default function Table({ data }) {
       <div className="container">
         <div className="input-group">
           <input
+            value={input}
+            onChange={handelChange}
             type="text"
             className="form-control"
             placeholder="Enter City Name:"
             aria-describedby="basic-addon2"
-          ></input>
+          />
           <div className="input-group-append">
             <button className="btn btn-outline-primary" type="button">
               Submit
@@ -70,18 +94,6 @@ export default function Table({ data }) {
               <th scope="col">Humidity</th>
             </tr>
           </thead>
-          {data.map((weather) => {
-            return (
-              <tbody key={weather.name}>
-                <tr>
-                  <th scope="row">{weather.name}</th>
-                  <td>{weather.main.temp}</td>
-                  <td>{weather.main.pressure}</td>
-                  <td>{weather.main.humidity}</td>
-                </tr>
-              </tbody>
-            );
-          })}
         </table>
       </div>
     );

@@ -1,10 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import weatherReducer from "./slices/weather";
-import searchReducer from "./slices/search";
+import apiReducer from "./slices/apiSlice";
 
 const rootReducer = combineReducers({
-  weather: weatherReducer,
-  search: searchReducer,
+  weather: apiReducer,
 });
 
 export default rootReducer;
