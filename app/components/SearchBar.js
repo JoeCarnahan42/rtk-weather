@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { getLatLong } from "../store/slices/apiSlice";
 import { useDispatch } from "react-redux";
@@ -13,6 +14,7 @@ const SearchBar = () => {
   const submit = (e) => {
     e.preventDefault();
     dispatch(getLatLong(input));
+    setInput("");
   };
 
   return (

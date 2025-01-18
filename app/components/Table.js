@@ -1,10 +1,7 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { getForecast } from "../store/slices/apiSlice";
-import { useState, useEffect } from "react";
-
-// TODO: Move search bar to different component //
-// Figure out rendering problem //
+import { useState, useEffect, useMemo } from "react";
 
 export default function Table() {
   const [weatherData, setWeatherData] = useState([]);
@@ -21,14 +18,17 @@ export default function Table() {
   }, [latitude, longitude, dispatch]);
 
   useEffect(() => {
+    // Render Issue happens here //
     if (weather) {
-      setWeatherData((weather) => [...weatherData, weather]);
+      setWeatherData((weatherData) => {
+        return [...weatherData, weather];
+      });
     }
-  }, [weather, weatherData]);
+  }, [weather]);
 
   return (
     <div className="container">
-      <h1>Enter a city to get started</h1>
+      {!weather ? <h1>Enter a city to get started</h1> : <h1></h1>}
       <br />
       <table className="table table-bordered table-hover">
         <thead>
@@ -39,7 +39,7 @@ export default function Table() {
             <th scope="col">Humidity</th>
           </tr>
         </thead>
-        {console.log("re render -----")}
+        {console.log("re render ----->", weatherData)}
         {/* {weatherData.map((weather) => {
           console.log(weather);
         })} */}
