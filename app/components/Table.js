@@ -1,28 +1,18 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { getLatLong, getForecast } from "../store/slices/apiSlice";
+import { getForecast } from "../store/slices/apiSlice";
 import { useState, useEffect } from "react";
 
 // TODO: Move search bar to different component //
 // Figure out rendering problem //
 
 export default function Table() {
-  const [input, setInput] = useState("");
   const [weatherData, setWeatherData] = useState([]);
   const dispatch = useDispatch();
 
   const { latitude, longitude, weather } = useSelector(
     (state) => state.weather
   );
-
-  const submit = (e) => {
-    e.preventDefault();
-    dispatch(getLatLong(input));
-  };
-
-  const handelChange = (e) => {
-    setInput(e.target.value);
-  };
 
   useEffect(() => {
     if (latitude && longitude) {
@@ -38,25 +28,6 @@ export default function Table() {
 
   return (
     <div className="container">
-      <div className="input-group">
-        <input
-          value={input}
-          onChange={handelChange}
-          type="text"
-          className="form-control"
-          placeholder="Enter City Name:"
-          aria-describedby="basic-addon2"
-        />
-        <div className="input-group-append">
-          <button
-            onClick={submit}
-            className="btn btn-outline-primary"
-            type="button"
-          >
-            Submit
-          </button>
-        </div>
-      </div>
       <h1>Enter a city to get started</h1>
       <br />
       <table className="table table-bordered table-hover">
