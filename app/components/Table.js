@@ -1,7 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
 import { getLatLong, getForecast } from "../store/slices/apiSlice";
-import { addCity, removeCity } from "../store/slices/historySlice";
 import { useState, useEffect } from "react";
 
 // TODO: Move search bar to different component //
@@ -15,8 +14,6 @@ export default function Table() {
   const { latitude, longitude, weather } = useSelector(
     (state) => state.weather
   );
-
-  const { history } = useSelector((state) => state.history);
 
   const submit = (e) => {
     e.preventDefault();
@@ -35,17 +32,9 @@ export default function Table() {
 
   useEffect(() => {
     if (weather) {
-      dispatch(addCity(weather));
+      setWeatherData((weather) => [...weatherData, weather]);
     }
-  }, [weather, dispatch]);
-
-  useEffect(() => {
-    if (history.length > 0) {
-      history.forEach((city) => {
-        setWeatherData((weatherData) => [...weatherData, city]);
-      });
-    }
-  }, [history]);
+  }, [weather, weatherData]);
 
   return (
     <div className="container">
