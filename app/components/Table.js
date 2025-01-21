@@ -26,34 +26,31 @@ export default function Table() {
   useEffect(() => {
     if (weather) {
       const weatherObj = {
+        id: weather.city.id,
         cityName: weather.city.name,
-        dayOne: {
-          temp: weather.list[3].main.temp,
-          pressure: weather.list[3].main.pressure,
-          humidity: weather.list[3].main.humidity,
-        },
-        dayTwo: {
-          temp: weather.list[12].main.temp,
-          pressure: weather.list[12].main.pressure,
-          humidity: weather.list[12].main.humidity,
-        },
-        dayThree: {
-          temp: weather.list[20].main.temp,
-          pressure: weather.list[20].main.pressure,
-          humidity: weather.list[20].main.humidity,
-        },
-        dayFour: {
-          temp: weather.list[28].main.temp,
-          pressure: weather.list[28].main.pressure,
-          humidity: weather.list[28].main.humidity,
-        },
-        dayFive: {
-          temp: weather.list[36].main.temp,
-          pressure: weather.list[36].main.pressure,
-          humidity: weather.list[36].main.humidity,
-        },
+        temp: [
+          Math.floor(weather.list[3].main.temp),
+          Math.floor(weather.list[12].main.temp),
+          Math.floor(weather.list[20].main.temp),
+          Math.floor(weather.list[28].main.temp),
+          Math.floor(weather.list[36].main.temp),
+        ],
+        pressure: [
+          Math.floor(weather.list[3].main.pressure),
+          Math.floor(weather.list[12].main.pressure),
+          Math.floor(weather.list[20].main.pressure),
+          Math.floor(weather.list[28].main.pressure),
+          Math.floor(weather.list[36].main.pressure),
+        ],
+        humidity: [
+          Math.floor(weather.list[3].main.humidity),
+          Math.floor(weather.list[12].main.humidity),
+          Math.floor(weather.list[20].main.humidity),
+          Math.floor(weather.list[28].main.humidity),
+          Math.floor(weather.list[36].main.humidity),
+        ],
       };
-      rawWeatherData.push(weatherObj);
+      rawWeatherData.unshift(weatherObj);
     }
   }, [weather]);
 
@@ -78,8 +75,8 @@ export default function Table() {
         </thead>
         {weatherData.map((data) => {
           return (
-            <tbody key={data[0].city.id}>
-              <th scope="row">{data.city.name}</th>
+            <tbody key={data[0].id}>
+              <th scope="row">{data[0].cityName}</th>
               <td>
                 <Sparklines data={data[0].temp}>
                   <SparklinesBars
