@@ -18,7 +18,6 @@ export default function Table() {
   }, [latitude, longitude, dispatch]);
 
   useEffect(() => {
-    // Render Issue happens here //
     if (weather) {
       setWeatherData((weatherData) => {
         return [...weatherData, weather];
@@ -39,10 +38,8 @@ export default function Table() {
             <th scope="col">Humidity</th>
           </tr>
         </thead>
-        {console.log("re render ----->", weatherData)}
-        {/* {weatherData.map((weather) => {
-          console.log(weather);
-        })} */}
+        {/* CHARTS */}
+        {}
       </table>
     </div>
   );
