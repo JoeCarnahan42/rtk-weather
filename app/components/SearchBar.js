@@ -19,6 +19,7 @@ const SearchBar = () => {
 
   return (
     <div className="container">
+      <br />
       <div className="input-group">
         <input
           value={input}

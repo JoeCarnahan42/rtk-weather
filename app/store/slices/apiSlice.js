@@ -50,7 +50,7 @@ const apiSlice = createSlice({
       })
       .addCase(getForecast.fulfilled, (state, action) => {
         state.loading = false;
-        state.weather = action.payload;
+        state.weather = action.payload; //TODO: filter data in, only sending what is needed //
       })
       .addCase(getForecast.rejected, (state, action) => {
         state.loading = false;
