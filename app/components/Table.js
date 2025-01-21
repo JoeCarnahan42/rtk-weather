@@ -8,10 +8,11 @@ import {
   SparklinesBars,
 } from "react-sparklines";
 
+// TODO: Form Validation //
+
 export default function Table() {
   const [weatherData, setWeatherData] = useState([]);
   const dispatch = useDispatch();
-  const rawWeatherData = [];
 
   const { latitude, longitude, weather } = useSelector(
     (state) => state.weather
@@ -25,40 +26,56 @@ export default function Table() {
 
   useEffect(() => {
     if (weather) {
+      const temp = [
+        Math.floor(weather.list[3].main.temp),
+        Math.floor(weather.list[12].main.temp),
+        Math.floor(weather.list[20].main.temp),
+        Math.floor(weather.list[28].main.temp),
+        Math.floor(weather.list[36].main.temp),
+      ];
+
+      const pressure = [
+        Math.floor(weather.list[3].main.pressure),
+        Math.floor(weather.list[12].main.pressure),
+        Math.floor(weather.list[20].main.pressure),
+        Math.floor(weather.list[28].main.pressure),
+        Math.floor(weather.list[36].main.pressure),
+      ];
+
+      const humidity = [
+        Math.floor(weather.list[3].main.humidity),
+        Math.floor(weather.list[12].main.humidity),
+        Math.floor(weather.list[20].main.humidity),
+        Math.floor(weather.list[28].main.humidity),
+        Math.floor(weather.list[36].main.humidity),
+      ];
+
+      const calcAvg = (numbers) => {
+        const sum = numbers.reduce(
+          (accumulator, currentValue) => accumulator + currentValue,
+          0
+        );
+
+        const avg = sum / numbers.length;
+
+        return avg;
+      };
+
       const weatherObj = {
         id: weather.city.id,
         cityName: weather.city.name,
-        temp: [
-          Math.floor(weather.list[3].main.temp),
-          Math.floor(weather.list[12].main.temp),
-          Math.floor(weather.list[20].main.temp),
-          Math.floor(weather.list[28].main.temp),
-          Math.floor(weather.list[36].main.temp),
-        ],
-        pressure: [
-          Math.floor(weather.list[3].main.pressure),
-          Math.floor(weather.list[12].main.pressure),
-          Math.floor(weather.list[20].main.pressure),
-          Math.floor(weather.list[28].main.pressure),
-          Math.floor(weather.list[36].main.pressure),
-        ],
-        humidity: [
-          Math.floor(weather.list[3].main.humidity),
-          Math.floor(weather.list[12].main.humidity),
-          Math.floor(weather.list[20].main.humidity),
-          Math.floor(weather.list[28].main.humidity),
-          Math.floor(weather.list[36].main.humidity),
-        ],
+        temp: temp,
+        avgTemp: calcAvg(temp),
+        pressure: pressure,
+        avgPress: calcAvg(pressure),
+        humidity: humidity,
+        avgHum: calcAvg(humidity),
       };
-      rawWeatherData.unshift(weatherObj);
+      setWeatherData((weatherData) => {
+        return [weatherObj, ...weatherData];
+      });
     }
   }, [weather]);
-
-  useEffect(() => {
-    if (rawWeatherData.length > 0) {
-      setWeatherData(rawWeatherData);
-    }
-  }, [rawWeatherData]);
 
   return (
     <div className="container">
@@ -68,45 +85,56 @@ export default function Table() {
         <thead>
           <tr>
             <th scope="col">City</th>
-            <th scope="col">Tempurature</th>
-            <th scope="col">Pressure</th>
-            <th scope="col">Humidity</th>
+            <th scope="col">Tempurature (F)</th>
+            <th scope="col">Pressure (hPa)</th>
+            <th scope="col">Humidity (%)</th>
           </tr>
         </thead>
-        {weatherData.map((data) => {
-          return (
-            <tbody key={data[0].id}>
-              <th scope="row">{data[0].cityName}</th>
-              <td>
-                <Sparklines data={data[0].temp}>
-                  <SparklinesBars
-                    style={{ fill: "slategray", fillOpacity: ".5" }}
-                  />
-                  <SparklinesReferenceLine type="avg" />
-                </Sparklines>
-                <p>Tempurature(F)</p>
-              </td>
-              <td>
-                <Sparklines data={data[0].pressure}>
-                  <SparklinesBars
-                    style={{ fill: "slategray", fillOpacity: ".5" }}
-                  />
-                  <SparklinesReferenceLine type="avg" />
-                </Sparklines>
-                <p>Pressure</p>
-              </td>
-              <td>
-                <Sparklines data={data[0].humidity}>
-                  <SparklinesBars
-                    style={{ fill: "slategray", fillOpacity: ".5" }}
-                  />
-                  <SparklinesReferenceLine type="avg" />
-                </Sparklines>
-                <p>Humidity</p>
-              </td>
-            </tbody>
-          );
-        })}
+        {weatherData.length > 0 &&
+          weatherData.map((data) => {
+            if (data) {
+              return (
+                <tbody key={data.id}>
+                  <tr className="align-middle">
+                    <th scope="row">{data.cityName}</th>
+                    <td className="align-middle">
+                      <Sparklines data={data.temp}>
+                        <SparklinesBars
+                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                        />
+                        <SparklinesReferenceLine type="avg" />
+                      </Sparklines>
+                      <p>
+                        Average Temperature: <strong>{data.avgTemp} F</strong>
+                      </p>
+                    </td>
+                    <td className="align-middle">
+                      <Sparklines data={data.pressure}>
+                        <SparklinesBars
+                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                        />
+                        <SparklinesReferenceLine type="avg" />
+                      </Sparklines>
+                      <p>
+                        Average Pressure: <strong>{data.avgPress} hPa</strong>
+                      </p>
+                    </td>
+                    <td className="align-middle">
+                      <Sparklines data={data.humidity}>
+                        <SparklinesBars
+                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                        />
+                        <SparklinesReferenceLine type="avg" />
+                      </Sparklines>
+                      <p>
+                        Average Humidity: <strong>{data.avgHum} %</strong>
+                      </p>
+                    </td>
+                  </tr>
+                </tbody>
+              );
+            }
+          })}
       </table>
     </div>
   );
