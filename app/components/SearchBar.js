@@ -1,20 +1,34 @@
 "use client";
-import { useState } from "react";
 import { getLatLong } from "../store/slices/apiSlice";
 import { useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const SearchBar = () => {
-  const [input, setInput] = useState("");
   const dispatch = useDispatch();
 
-  const handelChange = (e) => {
-    setInput(e.target.value);
-  };
+  const schema = yup.object({
+    input: yup
+      .string()
+      .transform(function (value) {
+        return value.toLowerCase(), value.trim("");
+      })
+      .required("City name is required."),
+  });
 
-  const submit = (e) => {
-    e.preventDefault();
-    dispatch(getLatLong(input));
-    setInput("");
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const submit = (data) => {
+    dispatch(getLatLong(data.input));
+    setValue("input", "");
   };
 
   return (
@@ -22,8 +36,7 @@ const SearchBar = () => {
       <br />
       <div className="input-group">
         <input
-          value={input}
-          onChange={handelChange}
+          {...register("input", { required: true })}
           type="text"
           className="form-control"
           placeholder="Enter City Name:"
@@ -31,7 +44,7 @@ const SearchBar = () => {
         />
         <div className="input-group-append">
           <button
-            onClick={submit}
+            onClick={handleSubmit(submit)}
             className="btn btn-outline-primary"
             type="button"
           >
@@ -39,6 +52,9 @@ const SearchBar = () => {
           </button>
         </div>
       </div>
+      {errors.input?.message && (
+        <div className="alert alert-danger">{errors.input?.message}</div>
+      )}
     </div>
   );
 };

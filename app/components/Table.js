@@ -56,13 +56,13 @@ export default function Table() {
           0
         );
 
-        const avg = sum / numbers.length;
+        const avg = Math.floor(sum / numbers.length);
 
         return avg;
       };
 
       const weatherObj = {
-        id: weather.city.id,
+        id: Math.random(Math.floor() * 10000),
         cityName: weather.city.name,
         temp: temp,
         avgTemp: calcAvg(temp),
@@ -100,7 +100,7 @@ export default function Table() {
                     <td className="align-middle">
                       <Sparklines data={data.temp}>
                         <SparklinesBars
-                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                          style={{ fill: "orange", fillOpacity: ".5" }}
                         />
                         <SparklinesReferenceLine type="avg" />
                       </Sparklines>
@@ -111,7 +111,7 @@ export default function Table() {
                     <td className="align-middle">
                       <Sparklines data={data.pressure}>
                         <SparklinesBars
-                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                          style={{ fill: "orange", fillOpacity: ".5" }}
                         />
                         <SparklinesReferenceLine type="avg" />
                       </Sparklines>
@@ -122,7 +122,7 @@ export default function Table() {
                     <td className="align-middle">
                       <Sparklines data={data.humidity}>
                         <SparklinesBars
-                          style={{ fill: "slategray", fillOpacity: ".5" }}
+                          style={{ fill: "orange", fillOpacity: ".5" }}
                         />
                         <SparklinesReferenceLine type="avg" />
                       </Sparklines>
