@@ -8,8 +8,6 @@ import {
   SparklinesBars,
 } from "react-sparklines";
 
-// TODO: Form Validation //
-
 export default function Table() {
   const [weatherData, setWeatherData] = useState([]);
   const dispatch = useDispatch();
