@@ -16,6 +16,24 @@ export default function Table() {
     (state) => state.weather
   );
 
+  const data = (weather, dataPoint) => {
+    const arr = [3, 12, 20, 28, 36];
+    return arr.map((number) => {
+      return Math.floor(weather.list[number].main[dataPoint]);
+    });
+  };
+
+  const calcAvg = (numbers) => {
+    const sum = numbers.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
+
+    const avg = Math.floor(sum / numbers.length);
+
+    return avg;
+  };
+
   useEffect(() => {
     if (latitude && longitude) {
       dispatch(getForecast({ latitude, longitude }));
@@ -24,40 +42,9 @@ export default function Table() {
 
   useEffect(() => {
     if (weather) {
-      const temp = [
-        Math.floor(weather.list[3].main.temp),
-        Math.floor(weather.list[12].main.temp),
-        Math.floor(weather.list[20].main.temp),
-        Math.floor(weather.list[28].main.temp),
-        Math.floor(weather.list[36].main.temp),
-      ];
-
-      const pressure = [
-        Math.floor(weather.list[3].main.pressure),
-        Math.floor(weather.list[12].main.pressure),
-        Math.floor(weather.list[20].main.pressure),
-        Math.floor(weather.list[28].main.pressure),
-        Math.floor(weather.list[36].main.pressure),
-      ];
-
-      const humidity = [
-        Math.floor(weather.list[3].main.humidity),
-        Math.floor(weather.list[12].main.humidity),
-        Math.floor(weather.list[20].main.humidity),
-        Math.floor(weather.list[28].main.humidity),
-        Math.floor(weather.list[36].main.humidity),
-      ];
-
-      const calcAvg = (numbers) => {
-        const sum = numbers.reduce(
-          (accumulator, currentValue) => accumulator + currentValue,
-          0
-        );
-
-        const avg = Math.floor(sum / numbers.length);
-
-        return avg;
-      };
+      const temp = data(weather, "temp");
+      const pressure = data(weather, "pressure");
+      const humidity = data(weather, "humidity");
 
       const weatherObj = {
         id: Math.random(Math.floor() * 10000),

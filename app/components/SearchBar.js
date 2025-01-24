@@ -8,11 +8,12 @@ import * as yup from "yup";
 const SearchBar = () => {
   const dispatch = useDispatch();
 
+  // Better validation?? //
   const schema = yup.object({
     input: yup
       .string()
       .transform(function (value) {
-        return value.toLowerCase(), value.trim("");
+        return value.toLowerCase(), value.trim(" ");
       })
       .required("City name is required."),
   });

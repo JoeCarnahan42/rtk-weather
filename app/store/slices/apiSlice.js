@@ -5,9 +5,11 @@ export const getLatLong = createAsyncThunk("getLatLong", async (cityInput) => {
   const response = await axios.get(
     `http://api.openweathermap.org/geo/1.0/direct?q=${cityInput}&limit=5&appid=c09e162aa897c3130ce9f6bfd5698b9b&units=imperial`
   );
+
   if (response.data.length > 0) {
+    // Handles cities including "Saint". Would break if user typed "St."
     if (cityInput.split(".")[0].toLowerCase() == "st") {
-      cityInput = "saint " + cityInput.split(".")[1];
+      cityInput = "saint " + cityInput.split(".")[1].trim(" ");
     }
     const data = response.data.filter((city) => {
       return city.name.toLowerCase() === cityInput;
