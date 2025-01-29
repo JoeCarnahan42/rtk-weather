@@ -18,9 +18,8 @@ export default function Table() {
 
   const data = (weather, dataPoint) => {
     const arr = [3, 12, 20, 28, 36];
-    return arr.map((number) => {
-      return Math.floor(weather.list[number].main[dataPoint]);
-    });
+    return arr.map((number) =>  Math.floor(weather.list[number].main[dataPoint]);
+    );
   };
 
   const calcAvg = (numbers) => {
